@@ -13,4 +13,7 @@ extension ContextExt on BuildContext {
   Color get primaryColor {
     return Theme.of(this).primaryColor;
   }
+  Color get primaryColorLight {
+    return Theme.of(this).primaryColorLight;
+  }
 }

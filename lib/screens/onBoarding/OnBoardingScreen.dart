@@ -1,7 +1,15 @@
+import 'dart:ui' as ui;
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_app/extensions/BuildContextExt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import '../../casheHelper/sharedPreferences.dart';
+import '../../providers/themeProvider.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   static const String routeName = '/onBoarding';
@@ -12,28 +20,12 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  bool isDarkMode = false;
-  bool isArabic = true;
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset('assets/images/evently_logo.png', height: 40),
-            SizedBox(width: 8),
-            Text(
-              'Evently',
-              style: GoogleFonts.jockeyOne(
-                decoration: TextDecoration.none,
-                fontSize: 36,
-                color: Color(0xff5669FF),
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
+        title: Image.asset('assets/images/fullLogoHorizontal.png'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -41,88 +33,100 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset("assets/images/onboarding_img.png"),
-              SizedBox(height: 28),
-              Text(
-                "Personalize Your Experience",
-                style: context.bodyMedium.copyWith(color: context.primaryColor),
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(20.r),
+                width: double.infinity,
+                height: 361.h,
+
+                child: Image.asset(
+                  SharedPreferencesHelper.getDarkMode()
+                      ? "assets/images/onboarding_img_dark.png"
+                      : "assets/images/onboarding_img.png",
+                ),
               ),
-              SizedBox(height: 28),
+              SizedBox(height: 28.h),
               Text(
-                "Choose your preferred theme and language to get started with a comfortable, tailored experience that suits your style.",
-                style: context.bodySmall,
+                "onboarding_title1".tr(),
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
-              SizedBox(height: 28),
+              SizedBox(height: 28.h),
+              Text("onboarding_body1".tr(), style: context.bodyLarge),
+              SizedBox(height: 28.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Language",
-                    style: context.bodyMedium.copyWith(
-                      fontWeight: FontWeight.normal,
+                    "language".tr(),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: context.primaryColor, width: 2),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: isArabic ? EdgeInsets.all(4) : null,
-                          decoration: isArabic
-                              ? BoxDecoration()
-                              : BoxDecoration(
-                                  color: context.primaryColor,
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
+                  Directionality(
+                    textDirection: ui.TextDirection.ltr,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30.r),
+                        border: Border.all(
+                          color: context.primaryColor,
+                          width: 2.w,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            margin: SharedPreferencesHelper.getLanguage() == "ar" ? EdgeInsets.all(4.r)
+                                : null,
+                            decoration: SharedPreferencesHelper.getLanguage() == "ar" ? BoxDecoration()
+                                : BoxDecoration(
                                     color: context.primaryColor,
-                                    width: 4,
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(
+                                      color: context.primaryColor,
+                                      width: 4.r,
+                                    ),
                                   ),
-                                ),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                isArabic = false;
-                              });
-                            },
-                            child: Image.asset(
-                              "assets/icons/en_ic.png",
-                              width: 21,
-                              height: 21,
+                            child: InkWell(
+                              onTap: () {
+                                context.setLocale(Locale("en"));
+                                SharedPreferencesHelper.setLanguage("en");
+                              },
+                              child: Image.asset(
+                                "assets/icons/en_ic.png",
+                                width: 21.w,
+                                height: 21.h,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 8),
-                        Container(
-                          margin: !isArabic ? EdgeInsets.all(4) : null,
-                          decoration: !isArabic
-                              ? BoxDecoration()
-                              : BoxDecoration(
-                                  color: context.primaryColor,
+                          SizedBox(width: 8.w),
+                          Container(
+                            margin: SharedPreferencesHelper.getLanguage() != "ar" ? EdgeInsets.all(4)
+                                : null,
+                            decoration: SharedPreferencesHelper.getLanguage() != "ar" ? BoxDecoration()
+                                : BoxDecoration(
+                                    color: context.primaryColor,
 
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                    color: context.primaryColor,
-                                    width: 4,
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(
+                                      color: context.primaryColor,
+                                      width: 4.w,
+                                    ),
                                   ),
-                                ),
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                isArabic = true;
-                              });
-                            },
-                            child: Image.asset(
-                              "assets/icons/ar_ic.png",
-                              width: 21,
-                              height: 21,
+                            child: InkWell(
+                              onTap: () {
+                                context.setLocale(Locale("ar"));
+                                SharedPreferencesHelper.setLanguage("ar");
+                              },
+                              child: Image.asset(
+                                "assets/icons/ar_ic.png",
+                                width: 21.w,
+                                height: 21.h,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -133,71 +137,70 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Theme",
-                    style: context.bodyMedium.copyWith(
-                      fontWeight: FontWeight.normal,
+                    "theme".tr(),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: context.primaryColor, width: 2),
+                      borderRadius: BorderRadius.circular(30.r),
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        width: 2.r,
+                      ),
                     ),
                     child: Row(
                       children: [
                         Container(
-                          margin: isDarkMode ? EdgeInsets.all(4) : null,
-                          decoration: isDarkMode
-                              ? BoxDecoration()
+                          margin: SharedPreferencesHelper.getDarkMode() ? EdgeInsets.all(4.r) : null,
+                          decoration: SharedPreferencesHelper.getDarkMode() ? BoxDecoration()
                               : BoxDecoration(
                                   color: context.primaryColor,
                                   borderRadius: BorderRadius.circular(30),
                                   border: Border.all(
                                     color: context.primaryColor,
-                                    width: 4,
+                                    width: 4.r,
                                   ),
                                 ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                isDarkMode = false;
-                              });
+                              themeProvider.setThemeMode(ThemeMode.light);
+                              SharedPreferencesHelper.setDarkMode(false);
                             },
                             child: Icon(
                               Icons.light_mode,
-                              color: isDarkMode
+                              color: SharedPreferencesHelper.getDarkMode()
                                   ? context.primaryColor
-                                  : Colors.white,
-                              size: 21,
+                                  : context.primaryColorLight,
+                              size: 21.r,
                             ),
                           ),
                         ),
-                        SizedBox(width: 8),
+                        SizedBox(width: 8.w),
                         Container(
-                          margin: !isDarkMode ? EdgeInsets.all(4) : null,
-                          decoration: !isDarkMode
-                              ? BoxDecoration()
+                          margin: !SharedPreferencesHelper.getDarkMode() ? EdgeInsets.all(4) : null,
+                          decoration: !SharedPreferencesHelper.getDarkMode() ? BoxDecoration()
                               : BoxDecoration(
                                   color: context.primaryColor,
                                   borderRadius: BorderRadius.circular(30),
                                   border: Border.all(
                                     color: context.primaryColor,
-                                    width: 4,
+                                    width: 4.r,
                                   ),
                                 ),
                           child: InkWell(
                             onTap: () {
-                              setState(() {
-                                isDarkMode = true;
-                              });
+                              themeProvider.setThemeMode(ThemeMode.dark);
+                              SharedPreferencesHelper.setDarkMode(true);
                             },
                             child: Icon(
                               Icons.dark_mode,
-                              color: !isDarkMode
+                              color: !SharedPreferencesHelper.getDarkMode()
                                   ? context.primaryColor
-                                  : Colors.white,
+                                  : context.primaryColorLight,
 
-                              size: 21,
+                              size: 21.r,
                             ),
                           ),
                         ),
@@ -206,18 +209,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 80),
-              SafeArea(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle continue button press
-                  },
-                  child: Text(
-                    "Let's start",
-                    style: context.bodyMedium.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
+              SizedBox(height: 28.h),
+              ElevatedButton(
+                onPressed: () {
+                  SharedPreferencesHelper.setOnBoardingSeen(true);
+                  Navigator.pushReplacementNamed(context, '/login'); // Adjust the route as needed
+                },
+                child: Text(
+                  "onboarding_button1".tr(),
+                  style: GoogleFonts.inter(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
                   ),
                 ),
               ),
