@@ -1,13 +1,12 @@
 import 'dart:ui' as ui;
-
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently_app/core/colors/lightColors.dart';
 import 'package:evently_app/extensions/BuildContextExt.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:evently_app/screens/onBoarding/introScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-
 import '../../casheHelper/sharedPreferences.dart';
 import '../../providers/themeProvider.dart';
 
@@ -22,10 +21,12 @@ class OnBoardingScreen extends StatefulWidget {
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
     var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Image.asset('assets/images/fullLogoHorizontal.png'),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -48,10 +49,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               SizedBox(height: 28.h),
               Text(
                 "onboarding_title1".tr(),
-                style: Theme.of(context).textTheme.headlineMedium,
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               SizedBox(height: 28.h),
-              Text("onboarding_body1".tr(), style: context.bodyLarge),
+              Text("onboarding_body1".tr(),
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: !themeProvider.isDarkMode? LightColors().primary2 : null,
+                  )),
               SizedBox(height: 28.h),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,8 +65,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 children: [
                   Text(
                     "language".tr(),
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      color: Theme.of(context).primaryColor
                     ),
                   ),
                   Directionality(
@@ -69,7 +75,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(30.r),
                         border: Border.all(
-                          color: context.primaryColor,
+                          color: LightColors().primary1,
                           width: 2.w,
                         ),
                       ),
@@ -80,10 +86,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                 : null,
                             decoration: SharedPreferencesHelper.getLanguage() == "ar" ? BoxDecoration()
                                 : BoxDecoration(
-                                    color: context.primaryColor,
+                                    color: LightColors().primary1,
                                     borderRadius: BorderRadius.circular(30),
                                     border: Border.all(
-                                      color: context.primaryColor,
+                                      color: LightColors().primary1,
                                       width: 4.r,
                                     ),
                                   ),
@@ -105,11 +111,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                 : null,
                             decoration: SharedPreferencesHelper.getLanguage() != "ar" ? BoxDecoration()
                                 : BoxDecoration(
-                                    color: context.primaryColor,
-
+                                    color: LightColors().primary1,
                                     borderRadius: BorderRadius.circular(30),
                                     border: Border.all(
-                                      color: context.primaryColor,
+                                      color: LightColors().primary1,
                                       width: 4.w,
                                     ),
                                   ),
@@ -138,15 +143,15 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 children: [
                   Text(
                     "theme".tr(),
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
+                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(30.r),
                       border: Border.all(
-                        color: Theme.of(context).primaryColor,
+                        color: LightColors().primary1,
                         width: 2.r,
                       ),
                     ),
@@ -156,10 +161,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           margin: SharedPreferencesHelper.getDarkMode() ? EdgeInsets.all(4.r) : null,
                           decoration: SharedPreferencesHelper.getDarkMode() ? BoxDecoration()
                               : BoxDecoration(
-                                  color: context.primaryColor,
+                                  color: LightColors().primary1,
                                   borderRadius: BorderRadius.circular(30),
                                   border: Border.all(
-                                    color: context.primaryColor,
+                                    color: LightColors().primary1,
                                     width: 4.r,
                                   ),
                                 ),
@@ -170,9 +175,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             },
                             child: Icon(
                               Icons.light_mode,
-                              color: SharedPreferencesHelper.getDarkMode()
-                                  ? context.primaryColor
-                                  : context.primaryColorLight,
+                              color: !SharedPreferencesHelper.getDarkMode()
+                                  ? Color(0xffF2FEFF)
+                                  : LightColors().primary1,
                               size: 21.r,
                             ),
                           ),
@@ -182,10 +187,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           margin: !SharedPreferencesHelper.getDarkMode() ? EdgeInsets.all(4) : null,
                           decoration: !SharedPreferencesHelper.getDarkMode() ? BoxDecoration()
                               : BoxDecoration(
-                                  color: context.primaryColor,
+                                  color: LightColors().primary1,
                                   borderRadius: BorderRadius.circular(30),
                                   border: Border.all(
-                                    color: context.primaryColor,
+                                    color: LightColors().primary1,
                                     width: 4.r,
                                   ),
                                 ),
@@ -196,9 +201,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             },
                             child: Icon(
                               Icons.dark_mode,
-                              color: !SharedPreferencesHelper.getDarkMode()
-                                  ? context.primaryColor
-                                  : context.primaryColorLight,
+                              color: SharedPreferencesHelper.getDarkMode()
+                                  ? Color(0xffF2FEFF)
+                                  : LightColors().primary1,
 
                               size: 21.r,
                             ),
@@ -213,7 +218,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               ElevatedButton(
                 onPressed: () {
                   SharedPreferencesHelper.setOnBoardingSeen(true);
-                  Navigator.pushReplacementNamed(context, '/login'); // Adjust the route as needed
+                  Navigator.pushReplacementNamed(context, IntroScreen.routeName); // Adjust the route as needed
                 },
                 child: Text(
                   "onboarding_button1".tr(),

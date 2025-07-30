@@ -7,13 +7,16 @@ class LightColors implements MainColors {
   Color get backgroundColor => const Color(0xFFF2FEFF);
 
   @override
+  Color get textColor => const Color(0xffF2FEFF); //
+
+  @override
   Color get primary1 => const Color(0xff5669FF); // Lightest
 
   @override
   Color get primary2 => const Color(0xff1C1C1C); // Lighter
 
   @override
-  Color get primary3 => const Color(0xFF7A9BFF); // Light
+  Color get primary3 => const Color(0xFFF2FEFF); // Light
 
   @override
   Color get primary4 => const Color(0xFF5669FF); // Normal
@@ -25,7 +28,7 @@ class LightColors implements MainColors {
   Color get primary6 => const Color(0xFF2A3BFF); // Darker
 
   @override
-  Color get secondary => const Color(0xFF00BFA5); // Teal
+  Color get secondary => const Color(0xff5669FF); // Teal
 
   @override
   Color get warning => const Color(0xFFFFA000); // Amber

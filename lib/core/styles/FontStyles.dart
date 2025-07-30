@@ -1,163 +1,117 @@
 import 'package:evently_app/core/styles/mainStyles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class FontStyles implements MainStyles {
-  @override
-  TextStyle h1(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 26,
-  );
+  TextStyle _getFont(
+      BuildContext context,
+      Color color,
+      double fontSize,
+      FontWeight fontWeight, {
+        double? height,
+      }) {
+    final isArabic = context.locale.languageCode == 'ar';
+
+    final font = isArabic
+        ? GoogleFonts.elMessiri(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      height: height,
+    )
+        : GoogleFonts.inter(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      height: height,
+    );
+
+    return font;
+  }
 
   @override
-  TextStyle h2(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 24,
-  );
+  TextStyle h1(BuildContext context, Color color) =>
+      _getFont(context, color, 26.sp, FontWeight.bold);
 
   @override
-  TextStyle h3(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 22,
-  );
+  TextStyle h2(BuildContext context, Color color) =>
+      _getFont(context, color, 24.sp, FontWeight.bold);
 
   @override
-  TextStyle h4(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 20,
-  );
+  TextStyle h3(BuildContext context, Color color) =>
+      _getFont(context, color, 22.sp, FontWeight.bold);
 
   @override
-  TextStyle h5(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 18,
-  );
+  TextStyle h4(BuildContext context, Color color) =>
+      _getFont(context, color, 20.sp, FontWeight.bold);
 
   @override
-  TextStyle h6(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 16,
-  );
+  TextStyle h5(BuildContext context, Color color) =>
+      _getFont(context, color, 18.sp, FontWeight.bold);
 
   @override
-  TextStyle bodyXLargeBold(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 24,
-  );
+  TextStyle h6(BuildContext context, Color color) =>
+      _getFont(context, color, 16.sp, FontWeight.bold);
 
   @override
-  TextStyle bodyXLargeMedium(Color color) => GoogleFonts.inter(
-    height: 1.3,
-    color: color,
-    fontWeight: FontWeight.w500,
-    fontSize: 18,
-  );
+  TextStyle bodyXLargeBold(BuildContext context, Color color) =>
+      _getFont(context, color, 24.sp, FontWeight.bold);
 
   @override
-  TextStyle bodyXLargeRegular(Color color) => GoogleFonts.inter(
-    height: 1.3,
-    color: color,
-    fontWeight: FontWeight.normal,
-    fontSize: 18,
-  );
+  TextStyle bodyXLargeMedium(BuildContext context, Color color) =>
+      _getFont(context, color, 18.sp, FontWeight.w500, height: 1.3);
 
   @override
-  TextStyle bodyLargeBold(Color color) => GoogleFonts.inter(
-    height: 1.45,
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 16,
-  );
+  TextStyle bodyXLargeRegular(BuildContext context, Color color) =>
+      _getFont(context, color, 18.sp, FontWeight.normal, height: 1.3);
 
   @override
-  TextStyle bodyLargeMedium(Color color) => GoogleFonts.inter(
-    height: 1.45,
-    color: color,
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-  );
+  TextStyle bodyLargeBold(BuildContext context, Color color) =>
+      _getFont(context, color, 16.sp, FontWeight.bold, height: 1.45);
 
   @override
-  TextStyle bodyLargeRegular(Color color) => GoogleFonts.inter(
-    height: 1.45,
-    color: color,
-    fontWeight: FontWeight.normal,
-    fontSize: 16,
-  );
+  TextStyle bodyLargeMedium(BuildContext context, Color color) =>
+      _getFont(context, color, 16.sp, FontWeight.w500, height: 1.45);
 
   @override
-  TextStyle bodyMediumBold(Color color) => GoogleFonts.inter(
-    height: 1.6,
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 14,
-  );
+  TextStyle bodyLargeRegular(BuildContext context, Color color) =>
+      _getFont(context, color, 16.sp, FontWeight.normal, height: 1.45);
 
   @override
-  TextStyle bodyMediumMedium(Color color) => GoogleFonts.inter(
-    height: 1.6,
-    color: color,
-    fontWeight: FontWeight.w500,
-    fontSize: 14,
-  );
+  TextStyle bodyMediumBold(BuildContext context, Color color) =>
+      _getFont(context, color, 14.sp, FontWeight.bold, height: 1.6);
 
   @override
-  TextStyle bodyMediumRegular(Color color) => GoogleFonts.inter(
-    height: 1.6,
-    color: color,
-    fontWeight: FontWeight.normal,
-    fontSize: 14,
-  );
+  TextStyle bodyMediumMedium(BuildContext context, Color color) =>
+      _getFont(context, color, 14.sp, FontWeight.w500, height: 1.6);
 
   @override
-  TextStyle bodySmallBold(Color color) => GoogleFonts.inter(
-    height: 1.6,
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-  );
+  TextStyle bodyMediumRegular(BuildContext context, Color color) =>
+      _getFont(context, color, 14.sp, FontWeight.normal, height: 1.6);
 
   @override
-  TextStyle bodySmallMedium(Color color) => GoogleFonts.inter(
-    height: 1.45,
-    color: color,
-    fontWeight: FontWeight.w500,
-    fontSize: 12,
-  );
+  TextStyle bodySmallBold(BuildContext context, Color color) =>
+      _getFont(context, color, 12.sp, FontWeight.bold, height: 1.6);
 
   @override
-  TextStyle bodySmallRegular(Color color) => GoogleFonts.inter(
-    height: 1.45,
-    color: color,
-    fontWeight: FontWeight.normal,
-    fontSize: 12,
-  );
+  TextStyle bodySmallMedium(BuildContext context, Color color) =>
+      _getFont(context, color, 12.sp, FontWeight.w500, height: 1.45);
 
   @override
-  TextStyle bodyXSmallBold(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.bold,
-    fontSize: 12,
-  );
+  TextStyle bodySmallRegular(BuildContext context, Color color) =>
+      _getFont(context, color, 12.sp, FontWeight.normal, height: 1.45);
 
   @override
-  TextStyle bodyXSmallMedium(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.w500,
-    fontSize: 12,
-  );
+  TextStyle bodyXSmallBold(BuildContext context, Color color) =>
+      _getFont(context, color, 12.sp, FontWeight.bold);
 
   @override
-  TextStyle bodyXSmallRegular(Color color) => GoogleFonts.inter(
-    color: color,
-    fontWeight: FontWeight.normal,
-    fontSize: 12,
-  );
+  TextStyle bodyXSmallMedium(BuildContext context, Color color) =>
+      _getFont(context, color, 12.sp, FontWeight.w500);
+
+  @override
+  TextStyle bodyXSmallRegular(BuildContext context, Color color) =>
+      _getFont(context, color, 12.sp, FontWeight.normal);
 }

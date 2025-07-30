@@ -1,18 +1,27 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently_app/providers/authProvider.dart';
+import 'package:evently_app/providers/tabsProvider.dart';
 import 'package:evently_app/providers/themeProvider.dart';
-import 'package:evently_app/register/logInScreen.dart';
+import 'package:evently_app/screens/homeScreen.dart';
 import 'package:evently_app/screens/onBoarding/OnBoardingScreen.dart';
 import 'package:evently_app/screens/onBoarding/introScreen.dart';
+import 'package:evently_app/screens/register/logInScreen.dart';
+import 'package:evently_app/screens/register/signUpScreen.dart';
 import 'package:evently_app/screens/splash/SplashScreen.dart';
 import 'package:evently_app/themes/AppTheme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'casheHelper/sharedPreferences.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await EasyLocalization.ensureInitialized();
   await SharedPreferencesHelper.init();
   runApp(
@@ -20,11 +29,20 @@ void main() async {
       supportedLocales: [Locale('ar'),Locale('en')],
       path:
           'assets/translations', // <-- change the path of the translation files
-      fallbackLocale: Locale('ar'),
-      child: ChangeNotifierProvider(
-          create: (BuildContext context) {
-            return ThemeProvider();
-          },
+      fallbackLocale: Locale('en'),
+      child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<ThemeProvider>(
+              create: (context) => ThemeProvider(),
+            ),
+            ChangeNotifierProvider<TabsProvider>(
+              create: (context) => TabsProvider(),
+            ),
+            ChangeNotifierProvider<AuthProvider>(
+              create: (context) => AuthProvider(),
+            ),
+
+          ],
           child: MyApp()
       ),
     ),
@@ -48,16 +66,18 @@ class MyApp extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: SharedPreferencesHelper.getLanguage() == "ar" ? Locale('ar') : Locale('en'),
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
+        theme: AppTheme.getTheme(isDarkMode: false, context: context),
+        darkTheme: AppTheme.getTheme(isDarkMode: true, context: context),
         themeMode: themeProvider.themeMode,
         routes: {
           SplashScreen.routeName: (context) => const SplashScreen(),
           OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
           IntroScreen.routeName: (context) => const IntroScreen(),
           LogInScreen.routeName: (context) => const LogInScreen(),
+          SignUpScreen.routeName: (context) => const SignUpScreen(),
+          HomeScreen.routeName: (context) => HomeScreen(),
         },
-        initialRoute: IntroScreen.routeName,
+        initialRoute: HomeScreen.routeName,
       ),
     );
   }

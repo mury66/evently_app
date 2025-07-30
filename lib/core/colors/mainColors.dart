@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 abstract class MainColors {
   Color get backgroundColor;
+  Color get textColor;
   Color get primary1;
   Color get primary2;
   Color get primary3;

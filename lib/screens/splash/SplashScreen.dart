@@ -1,7 +1,10 @@
+import 'package:evently_app/screens/register/logInScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../casheHelper/sharedPreferences.dart';
 import '../onBoarding/OnBoardingScreen.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -10,31 +13,18 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 1500), ()
-    {
-      Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
-
-    }
-    );
-    return Container(
-      color: Colors.white,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            'assets/images/evently_logo.png'
-          ),
-          Text(
-            'Evently',
-
-            style: GoogleFonts.jockeyOne(
-              decoration: TextDecoration.none,
-              fontSize: 36,
-              color: Color(0xff5669FF),
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ],
+    Future.delayed(Duration(milliseconds: 1500), () {
+      SharedPreferencesHelper.getOnBoardingSeen()
+          ? Navigator.pushReplacementNamed(context, LogInScreen.routeName)
+          : Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
+    });
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SizedBox(
+            width: 136.w,
+            height: 186.h,
+            child: Image.asset("assets/images/fullLogo.png")),
       ),
     );
   }
