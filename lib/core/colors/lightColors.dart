@@ -7,7 +7,19 @@ class LightColors implements MainColors {
   Color get backgroundColor => const Color(0xFFF2FEFF);
 
   @override
-  Color get textColor => const Color(0xffF2FEFF); //
+  Color get textColor => const Color(0xffF2FEFF);
+
+  @override
+   Color get textColor2 => const Color(0xff1C1C1C);
+
+  @override
+  Color get textColor3 => const Color(0xff5669FF);
+
+  @override
+  Color get textFieldTextColor => const Color(0xff7B7B7B); ///
+
+  @override
+  Color get selectedCategoryColor => const Color(0xFFF2FEFF); // Teal
 
   @override
   Color get primary1 => const Color(0xff5669FF); // Lightest

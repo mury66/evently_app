@@ -18,7 +18,20 @@ class AppTheme {
       primaryColor: colors.primary1,
       highlightColor: colors.textColor,
       splashColor: colors.secondary,
-
+      colorScheme: ColorScheme(
+        brightness: isDarkMode ? Brightness.dark : Brightness.light,
+        primary: colors.primary1,
+        onPrimary: colors.textColor,
+        secondary: colors.textFieldTextColor,
+        onSecondary: colors.textColor2,
+        tertiary: colors.textColor3,
+        error: colors.error,
+        onError: colors.textColor,
+        onPrimaryContainer:colors.selectedCategoryColor,
+        onSecondaryContainer: colors.textFieldTextColor ,
+        surface: colors.primary2,
+        onSurface: colors.textColor,
+      ),
       appBarTheme: AppBarTheme(
         centerTitle: true,
         backgroundColor: colors.secondary,
@@ -56,7 +69,28 @@ class AppTheme {
       bottomAppBarTheme: BottomAppBarTheme(
         color: colors.secondary,
 
-      )
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0),
+        hintStyle: font.bodySmallRegular(context, colors.textFieldTextColor),
+        labelStyle: font.bodyMediumRegular(context, colors.textFieldTextColor),
+        prefixIconColor: colors.textFieldTextColor,
+        suffixIconColor: colors.textFieldTextColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: BorderSide(color: colors.primary1, width: 1.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: BorderSide(color: colors.primary1, width: 1.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: BorderSide(color: colors.primary1, width: 1.0),
+        ),
+
+      ),
+
     );
   }
 }

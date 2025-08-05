@@ -6,7 +6,19 @@ class DarkColors implements MainColors {
   Color get backgroundColor => const Color(0xff101127);
 
   @override
-  Color get textColor => const Color(0xffF4EBDC); // Very light blue
+  Color get textColor => const Color(0xffF4EBDC);
+
+  @override
+  Color get textColor2 => const Color(0xffF4EBDC); // Very light blue
+
+  @override
+  Color get textColor3 => const Color(0xffF4EBDC);
+
+  @override
+  Color get textFieldTextColor => const Color(0xffF4EBDC); //
+
+  @override
+  Color get selectedCategoryColor => const Color(0xff5669FF); // Very dark blue
 
   @override
   Color get primary1 => const Color(0xff5669FF); // Very dark

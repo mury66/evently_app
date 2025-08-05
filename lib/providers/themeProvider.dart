@@ -18,10 +18,12 @@ class ThemeProvider extends ChangeNotifier
   void setThemeMode(ThemeMode mode) {
     if (mode == _themeMode) return; // Avoid unnecessary updates
     _themeMode = mode;
+    SharedPreferencesHelper.setDarkMode(_themeMode == ThemeMode.dark);
     notifyListeners();
   }
-  void swithThemeMode() {
+  void switchThemeMode() {
     _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    SharedPreferencesHelper.setDarkMode(_themeMode == ThemeMode.dark);
     notifyListeners();
   }
 

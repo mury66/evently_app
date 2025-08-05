@@ -2,12 +2,14 @@ import 'dart:ui' as ui;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_app/extensions/BuildContextExt.dart';
+import 'package:evently_app/screens/createEvent/createEventScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../casheHelper/sharedPreferences.dart';
+import '../providers/categoriesProvider.dart';
 import '../providers/tabsProvider.dart';
 import '../providers/themeProvider.dart';
 import '../widgets/categoryListItem.dart';
@@ -18,6 +20,7 @@ import 'homeTabs/profileTab.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/home';
+  int selectedCategoryIndex = 0;
   List<String> categories = [
     'all',
     'sport',
@@ -48,6 +51,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
     var tabProvider = Provider.of<TabsProvider>(context);
+    final categoryProvider = Provider.of<CategoriesProvider>(context);
+
     var themeProvider = Provider.of<ThemeProvider>(context);
     List<Widget> tabs = [
       const HomeTab(),
@@ -94,12 +99,22 @@ class HomeScreen extends StatelessWidget {
                         SizedBox(height: 24.h),
                         SizedBox(
                           height: 44.h,
-                          child: ListView.separated(
+                          child:
+                          ListView.separated(
                             scrollDirection: Axis.horizontal,
                             itemCount: categories.length,
                             separatorBuilder: (context, index) => SizedBox(width: 8.w),
-                            itemBuilder: (context, index) => CategorylistItem(categoryName: categories[index].tr(),
-                              categoryIcon: categoryIcons[categories[index]]?? Icons.category,
+                            itemBuilder: (context, index) => InkWell(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () {
+                                categoryProvider.setSelectedIndex(index);
+                              },
+
+                              child: CategorylistItem(categoryName: categories[index].tr(),
+                                categoryIcon: categoryIcons[categories[index]]?? Icons.category,
+                                isSelected: categoryProvider.selectedIndex == index,
+                              ),
                             ),
                           ),
                         ),
@@ -110,19 +125,29 @@ class HomeScreen extends StatelessWidget {
                 actionsPadding: EdgeInsets.symmetric(horizontal: 16),
                 actions: [
                   IconButton(
-                    icon: Icon(themeProvider.isDarkMode?Icons.light_mode_outlined:Icons.dark_mode_rounded, color:Theme.of(context).highlightColor, size: 35.r),
+                    icon: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) => RotationTransition(
+                          turns: animation,
+                          child: child,
+                        ),
+                        child: ImageIcon(
+                            (AssetImage(!themeProvider.isDarkMode?"assets/icons/night_mode.png":"assets/icons/light_mode.png" ))
+                            , color:Theme.of(context).highlightColor, size: 35.r)),
                     onPressed: () {
-                      themeProvider.swithThemeMode();
+                      themeProvider.switchThemeMode();
                     },
                   ),
                   SizedBox(
                     width: 35.w,
                     height: 35.h,
-                    child: ElevatedButton(onPressed:
-                        (){
-                          isArabic? context.setLocale(Locale("en")) : context.setLocale(Locale("ar"));
-                          SharedPreferencesHelper.setLanguage(isArabic?"ar":"en");
-                        },
+                    child:
+                    ElevatedButton(
+                      onPressed: () {
+                        final newLocale = isArabic ? Locale("en") : Locale("ar");
+                        context.setLocale(newLocale);
+                        SharedPreferencesHelper.setLanguage(newLocale.languageCode);
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.zero,
                         backgroundColor: Color(0xffF4EBDC),
@@ -130,8 +155,23 @@ class HomeScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8.r),
                         ),
                       ),
-                        child:Text(isArabic ? "EN" : "ع",style: Theme.of(context).textTheme.displaySmall!.copyWith(color: Theme.of(context).splashColor,fontWeight: FontWeight.bold)),
-                  ))
+                      child: AnimatedSwitcher(
+                        duration: Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) =>
+                            ScaleTransition(scale: animation, child: child),
+                        child: Text(
+                          isArabic ? "EN" : "ع",
+                          key: ValueKey<String>(isArabic ? "EN" : "ع"),
+                          style: Theme.of(context)
+                              .textTheme
+                              .displaySmall!
+                              .copyWith(
+                              color: Theme.of(context).splashColor,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  )
                 ],
               ),
             ],
@@ -146,13 +186,13 @@ class HomeScreen extends StatelessWidget {
           shape: CircularNotchedRectangle(),
           child: Row(
             children: [
-              buildNavItem("home", "Home",context,0,tabProvider),
+              buildNavItem("home",context,0,tabProvider),
               SizedBox(width: 60.w,),
-              buildNavItem("map", "Map",context,1,tabProvider),
+              buildNavItem("map",context,1,tabProvider),
               Spacer(),
-              buildNavItem("fav", "liked",context,2,tabProvider),
+              buildNavItem("fav",context,2,tabProvider),
               SizedBox(width: 60.w,),
-              buildNavItem("profile", "Profile",context,3,tabProvider),
+              buildNavItem("profile",context,3,tabProvider),
             ],
           ),
         ),
@@ -162,6 +202,7 @@ class HomeScreen extends StatelessWidget {
         height: 56.h,
         child: FloatingActionButton(
           onPressed: () {
+            Navigator.pushNamed(context, CreateEvent.routeName);
           },
           tooltip: 'Add',
           splashColor: Colors.transparent,
@@ -183,7 +224,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget buildNavItem(String iconPath, String label, context,int index,TabsProvider tabProvider) {
+  Widget buildNavItem(String label, context,int index,TabsProvider tabProvider) {
     return InkWell(
       highlightColor: Colors.transparent,
       borderRadius: BorderRadius.circular(8.r),
@@ -197,12 +238,12 @@ class HomeScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ImageIcon(
-            AssetImage(tabProvider.currentIndex == index ? "assets/icons/${iconPath}filled.png" : "assets/icons/$iconPath.png" ),
+            AssetImage(tabProvider.currentIndex == index ? "assets/icons/${label}filled.png" : "assets/icons/$label.png" ),
             color: Theme.of(context).highlightColor,
             size: 24.r,
           ),
           Text(
-            label,
+            label.tr(),
             style: Theme.of(context).textTheme.displaySmall!.copyWith(
               fontWeight: FontWeight.bold
             )

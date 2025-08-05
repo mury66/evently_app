@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_app/providers/authProvider.dart';
+import 'package:evently_app/providers/categoriesProvider.dart';
+import 'package:evently_app/providers/fitrstoreProvider.dart';
 import 'package:evently_app/providers/tabsProvider.dart';
 import 'package:evently_app/providers/themeProvider.dart';
+import 'package:evently_app/screens/createEvent/createEventScreen.dart';
 import 'package:evently_app/screens/homeScreen.dart';
 import 'package:evently_app/screens/onBoarding/OnBoardingScreen.dart';
 import 'package:evently_app/screens/onBoarding/introScreen.dart';
@@ -30,6 +33,7 @@ void main() async {
       path:
           'assets/translations', // <-- change the path of the translation files
       fallbackLocale: Locale('en'),
+      saveLocale: true,
       child: MultiProvider(
           providers: [
             ChangeNotifierProvider<ThemeProvider>(
@@ -41,7 +45,12 @@ void main() async {
             ChangeNotifierProvider<AuthProvider>(
               create: (context) => AuthProvider(),
             ),
-
+            ChangeNotifierProvider<CategoriesProvider>(
+              create: (_) => CategoriesProvider(),
+            ),
+            ChangeNotifierProvider<FireStoreProvider>(
+              create: (_) => FireStoreProvider(),
+            ),
           ],
           child: MyApp()
       ),
@@ -64,7 +73,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => MaterialApp(
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
-        locale: SharedPreferencesHelper.getLanguage() == "ar" ? Locale('ar') : Locale('en'),
+        locale: context.locale,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.getTheme(isDarkMode: false, context: context),
         darkTheme: AppTheme.getTheme(isDarkMode: true, context: context),
@@ -76,6 +85,7 @@ class MyApp extends StatelessWidget {
           LogInScreen.routeName: (context) => const LogInScreen(),
           SignUpScreen.routeName: (context) => const SignUpScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
+          CreateEvent.routeName: (context) => CreateEvent(),
         },
         initialRoute: HomeScreen.routeName,
       ),

@@ -71,7 +71,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
           textDirection: ui.TextDirection.ltr,
           child: AppBar(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: Text("sign_up".tr(),style: Theme.of(context).textTheme.headlineMedium),
+            title: Text("sign_up".tr(),style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+              color: Theme.of(context).primaryColor,
+            )),
             leading: Directionality(
               textDirection: ui.TextDirection.ltr,
               child: IconButton(
@@ -105,7 +107,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   textDirection: ui.TextDirection.ltr,
                   child: TextFormField(
                     controller: _nameController,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -153,7 +157,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   textDirection: ui.TextDirection.ltr,
                   child: TextFormField(
                     controller: _emailController,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -205,7 +211,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   textDirection: ui.TextDirection.ltr,
                   child: TextFormField(
                     controller: _phoneController,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -254,7 +262,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16.r),
@@ -318,7 +328,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: _obscurePassword,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16.r),
@@ -387,7 +399,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .displayLarge!
-                              .copyWith(color: Theme.of(context).highlightColor),
+                              .copyWith(color: Theme.of(context).colorScheme.onSecondary),
                         ),
                         TextSpan(
                           text: "login".tr(),

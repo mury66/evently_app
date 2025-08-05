@@ -37,7 +37,9 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.w),
@@ -212,10 +214,9 @@ class _LogInScreenState extends State<LogInScreen> {
                         TextSpan(
                           text: "don't_have_account".tr(),
                           style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                            color:Theme.of(context).highlightColor,
+                            color:Theme.of(context).colorScheme.onSecondary,
                           ),
                         ),
-
                         TextSpan(
                           text: "create_account".tr(),
                             style: Theme.of(context).textTheme.displayLarge!.copyWith(
@@ -226,8 +227,7 @@ class _LogInScreenState extends State<LogInScreen> {
                             ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pushNamed(context, SignUpScreen.routeName);
-
+                              Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
                             },
                         ),
                       ],
