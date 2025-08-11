@@ -88,6 +88,10 @@ class AppTheme {
           borderRadius: BorderRadius.circular(16.0),
           borderSide: BorderSide(color: colors.primary1, width: 1.0),
         ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16.0),
+          borderSide: BorderSide(color: colors.primary1, width: 1.0),
+        ),
 
       ),
 

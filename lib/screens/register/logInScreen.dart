@@ -9,6 +9,13 @@ import 'package:evently_app/screens/register/signUpScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/userModel.dart';
+import '../../providers/authProvider.dart';
+import '../../providers/fireStoreProvider.dart';
+import '../../widgets/snackBar.dart';
+import '../homeScreen.dart';
 
 class LogInScreen extends StatefulWidget {
   static const String routeName = '/login';
@@ -26,11 +33,33 @@ class _LogInScreenState extends State<LogInScreen> {
 
   bool _obscurePassword = true;
 
+  void onVerified(String message) {
+    Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+    showAppSnackBar(context, message);
+  }
+
+  void onNotVerified() {
+    showAppSnackBar(context, "Please verify your email before signing in.",backgroundColor: Colors.orangeAccent);
+  }
+
+  void onError(String message) {
+    showAppSnackBar(context,message,backgroundColor: Colors.redAccent);
+  }
+
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       print('Email: ${_emailController.text}');
       print('Password: ${_passwordController.text}');
       print('Form contains errors.');
+      Provider.of<AuthProvider>(context, listen: false)
+          .signInWithEmail(
+            _emailController.text,
+            _passwordController.text,
+            onVerified: onVerified,
+            onNotVerified: onNotVerified,
+            onError: onError,
+          );
     }
   }
 
@@ -61,7 +90,9 @@ class _LogInScreenState extends State<LogInScreen> {
                   textDirection: ui.TextDirection.ltr,
                   child: TextFormField(
                     controller: _emailController,
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -115,8 +146,9 @@ class _LogInScreenState extends State<LogInScreen> {
                   child: TextFormField(
                     controller: _passwordController,
                     obscureText: _obscurePassword,
-                    style: Theme.of(context).textTheme.bodySmall,
-
+                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16.r),
@@ -266,7 +298,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: _submitForm,
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
                       backgroundColor: SharedPreferencesHelper.getDarkMode() ?

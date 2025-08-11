@@ -31,10 +31,8 @@
   "location": "Cairo, Egypt",
   "all": "All",
   "sport": "Sport",
-  "workshop": "Workshop",
   "workShop": "Workshop",
   "birthday": "Birthday",
-  "book club": "Book Club",
   "bookClub": "Book Club",
   "eating": "Eating",
   "exhibition": "Exhibition",
@@ -46,6 +44,14 @@
   "profile": "Profile",
   "title": "Title",
   "description": "Description",
+  "event_date": "Event Date",
+  "event_time": "Event Time",
   "choose_date": "Choose Date",
-  "choose_time": "Choose Time"
+  "choose_time": "Choose Time",
+  "create_event": "Create Event",
+  "update_event": "Update Event",
+  "add_fav" : "Added to Favorites successfully",
+  "remove_fav" : "Removed from Favorites successfully",
+  "task_updated" : "Task updated successfully",
+  "task_created": "Task created successfully"
 }

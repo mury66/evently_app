@@ -1,10 +1,13 @@
+import 'package:evently_app/screens/homeScreen.dart';
 import 'package:evently_app/screens/register/logInScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../casheHelper/sharedPreferences.dart';
+import '../../providers/authProvider.dart';
 import '../onBoarding/OnBoardingScreen.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -13,9 +16,12 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(milliseconds: 1500), () {
-      SharedPreferencesHelper.getOnBoardingSeen()
-          ? Navigator.pushReplacementNamed(context, LogInScreen.routeName)
+    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    Future.delayed(Duration(milliseconds: 750), () {
+      SharedPreferencesHelper.getOnBoardingSeen() ?
+      userProvider.isLoggedIn ? Navigator.pushReplacementNamed(context, HomeScreen.routeName)
+          :Navigator.pushReplacementNamed(context, LogInScreen.routeName)
+
           : Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
     });
     return Scaffold(

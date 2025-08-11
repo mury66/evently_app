@@ -5,12 +5,15 @@ import 'package:evently_app/core/colors/darkColors.dart';
 import 'package:evently_app/core/colors/lightColors.dart';
 import 'package:evently_app/extensions/BuildContextExt.dart';
 import 'package:evently_app/models/userModel.dart';
+import 'package:evently_app/screens/register/logInScreen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/authProvider.dart';
+import '../../providers/fireStoreProvider.dart';
+import '../../widgets/snackBar.dart';
 import '../homeScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -31,30 +34,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   void onError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Center(child: Text(message)),
-        backgroundColor: Colors.redAccent,
-      ),
-    );
+    showAppSnackBar(context, message, backgroundColor: Colors.redAccent);
   }
-  void onSuccess(String message) {
-    Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Center(child: Text(message)),
-        backgroundColor: Colors.green,
-      ),
-    );
+  void onSuccess(String message, UserModel user) {
+    final fireStoreProvider = Provider.of<FireStoreProvider>(context, listen: false);
+    fireStoreProvider.createUser(user);
+    Navigator.pushReplacementNamed(context, LogInScreen.routeName);
+    showAppSnackBar(context, message);
   }
   void _submitForm() async{
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       final name = _nameController.text.trim();
       final email = _emailController.text.trim();
+      final phone = _phoneController.text.trim();
       final password = _passwordController.text.trim();
       try {
-        await authProvider.signUpWithEmail(user: UserModel(email: email), password: password,onError: onError,onSuccess: onSuccess);
+        await authProvider.signUpWithEmail(user: UserModel(name :name,email: email,phone: phone), password: password,onError: onError,onSuccess: onSuccess);
       } catch (e) {
         print("Registration error: $e");
       }
@@ -414,7 +410,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pop(context);
+                              Navigator.pushReplacementNamed(context, LogInScreen.routeName);
                             },
                         ),
                       ],

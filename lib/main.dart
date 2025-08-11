@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_app/providers/authProvider.dart';
 import 'package:evently_app/providers/categoriesProvider.dart';
-import 'package:evently_app/providers/fitrstoreProvider.dart';
+import 'package:evently_app/providers/fireStoreProvider.dart';
 import 'package:evently_app/providers/tabsProvider.dart';
 import 'package:evently_app/providers/themeProvider.dart';
 import 'package:evently_app/screens/createEvent/createEventScreen.dart';
@@ -11,6 +11,7 @@ import 'package:evently_app/screens/onBoarding/introScreen.dart';
 import 'package:evently_app/screens/register/logInScreen.dart';
 import 'package:evently_app/screens/register/signUpScreen.dart';
 import 'package:evently_app/screens/splash/SplashScreen.dart';
+import 'package:evently_app/screens/updateEvent/UpdateEventScreen.dart';
 import 'package:evently_app/themes/AppTheme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -86,8 +87,9 @@ class MyApp extends StatelessWidget {
           SignUpScreen.routeName: (context) => const SignUpScreen(),
           HomeScreen.routeName: (context) => HomeScreen(),
           CreateEvent.routeName: (context) => CreateEvent(),
+          UpdateEvent.routeName: (context) => UpdateEvent(),
         },
-        initialRoute: HomeScreen.routeName,
+        initialRoute: SplashScreen.routeName,
       ),
     );
   }

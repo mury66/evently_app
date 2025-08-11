@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently_app/extensions/BuildContextExt.dart';
+import 'package:evently_app/providers/authProvider.dart';
 import 'package:evently_app/screens/createEvent/createEventScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../casheHelper/sharedPreferences.dart';
+import '../models/userModel.dart';
 import '../providers/categoriesProvider.dart';
 import '../providers/tabsProvider.dart';
 import '../providers/themeProvider.dart';
@@ -24,9 +26,9 @@ class HomeScreen extends StatelessWidget {
   List<String> categories = [
     'all',
     'sport',
-    'workshop',
+    'workShop',
     'birthday',
-    'book club',
+    'bookClub',
     'eating',
     'exhibition',
     'gaming',
@@ -52,12 +54,16 @@ class HomeScreen extends StatelessWidget {
     final isArabic = context.locale.languageCode == 'ar';
     var tabProvider = Provider.of<TabsProvider>(context);
     final categoryProvider = Provider.of<CategoriesProvider>(context);
-
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var authProvider = Provider.of<AuthProvider>(context);
     List<Widget> tabs = [
-      const HomeTab(),
+      HomeTab(
+        category: categories[categoryProvider.selectedIndex],
+      ),
       const MapTab(),
-      const FavTab(),
+      FavTab(
+        category: categories[categoryProvider.selectedIndex],
+      ),
       const ProfileTab(),
     ];
     return Scaffold(
@@ -84,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("welcome_back".tr(), style: context.bodySmall),
-                        Text("Amer Medhat Ahmed", style: Theme.of(context).textTheme.headlineLarge),
+                        Text(authProvider.userModel?.name?? "NOTFOUND", style: Theme.of(context).textTheme.headlineLarge),
                         SizedBox(height: 4.h),
                         Directionality(
                           textDirection: isArabic ? ui.TextDirection.rtl : ui.TextDirection.ltr,
@@ -197,9 +203,16 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: SizedBox(
+      floatingActionButton: Container(
         width: 56.w,
         height: 56.h,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: Colors.white,
+            width: 5.w,
+          )
+        ),
         child: FloatingActionButton(
           onPressed: () {
             Navigator.pushNamed(context, CreateEvent.routeName);

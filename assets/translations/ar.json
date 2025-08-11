@@ -31,10 +31,8 @@
   "location": "القاهرة، مصر",
   "all": "الكل",
   "sport": "رياضة",
-  "workshop": "ورشة عمل",
   "workShop": "ورشة عمل",
   "birthday": "عيد ميلاد",
-  "book club": "نادي الكتاب",
   "bookClub": "نادي الكتاب",
   "eating": "تناول الطعام",
   "exhibition": "معرض",
@@ -46,6 +44,14 @@
   "profile": "الحساب",
   "title": "العنوان",
   "description": "الوصف",
+  "event_date": "تاريخ الفعالية",
+  "event_time": "وقت الفعالية",
   "choose_date": "اختر التاريخ",
-  "choose_time": "اختر الوقت"
+  "choose_time": "اختر الوقت",
+  "create_event": "إنشاء فعالية",
+  "update_event": "تحديث الفعالية",
+  "add_fav": "تمت إضافته إلى المفضلة بنجاح",
+  "remove_fav": "تمت إزالته من المفضلة بنجاح",
+  "Task_updated": "تم تحديث المهمة بنجاح",
+    "task_created": "تم إنشاء المهمة بنجاح"
 }
