@@ -35,6 +35,8 @@ class _LogInScreenState extends State<LogInScreen> {
 
   void onVerified(String message) {
     Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.initUser();
     showAppSnackBar(context, message);
   }
 
