@@ -8,18 +8,17 @@ import '../models/userModel.dart';
 import '../widgets/snackBar.dart';
 
 class FireStoreProvider extends ChangeNotifier {
-
   static CollectionReference<UserModel> getUsersCollection() {
     return FirebaseFirestore.instance
         .collection("Users")
         .withConverter<UserModel>(
-      fromFirestore: (snapshot, _) {
-        return UserModel.fromJson(snapshot.data()!);
-      },
-      toFirestore: (UserModel task, _) {
-        return task.toJson();
-      },
-    );
+          fromFirestore: (snapshot, _) {
+            return UserModel.fromJson(snapshot.data()!);
+          },
+          toFirestore: (UserModel task, _) {
+            return task.toJson();
+          },
+        );
   }
 
   createUser(UserModel user) async {
@@ -33,14 +32,37 @@ class FireStoreProvider extends ChangeNotifier {
     }
   }
 
+  updateUser(UserModel user, BuildContext context) async {
+    try {
+      var doc = getUsersCollection().doc(user.id);
+      await doc.set(user, SetOptions(merge: true));
+      notifyListeners();
+      showAppSnackBar(
+        context,
+        "Profile updated",
+        backgroundColor: Colors.green,
+      );
+    } catch (e) {
+      showAppSnackBar(
+        context,
+        "Failed to update profile: $e",
+        backgroundColor: Colors.redAccent,
+      );
+    }
+  }
+
   static Future<UserModel?> getUserById() async {
     try {
-      final docSnapshot = await getUsersCollection().doc(FirebaseAuth.instance.currentUser!.uid).get();
+      final docSnapshot = await getUsersCollection()
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .get();
       if (docSnapshot.exists) {
         print("ddddddeeeeebbbbbug${docSnapshot.data()}");
         return docSnapshot.data();
       } else {
-        print("User with ID ${FirebaseAuth.instance.currentUser!.uid} does not exist.");
+        print(
+          "User with ID ${FirebaseAuth.instance.currentUser!.uid} does not exist.",
+        );
         return null;
       }
     } catch (e) {
@@ -58,7 +80,6 @@ class FireStoreProvider extends ChangeNotifier {
             return TaskModel.fromJson(data);
           },
           toFirestore: (TaskModel task, _) {
-
             return task.toJson();
           },
         );
@@ -101,7 +122,11 @@ class FireStoreProvider extends ChangeNotifier {
       showAppSnackBar(context, "task_updated".tr());
       Navigator.pop(context);
     } catch (e) {
-      showAppSnackBar(context, "Failed_to_update_task! $e".tr(), backgroundColor: Colors.redAccent);
+      showAppSnackBar(
+        context,
+        "Failed_to_update_task! $e".tr(),
+        backgroundColor: Colors.redAccent,
+      );
     }
   }
 
@@ -115,7 +140,7 @@ class FireStoreProvider extends ChangeNotifier {
           await getTasksCollection().doc(taskId).update({'isFav': newValue});
           final message = newValue ? 'add_fav'.tr() : 'remove_fav'.tr();
           final snackBarColor = newValue ? Colors.green : Colors.redAccent;
-          showAppSnackBar(context, message,backgroundColor: snackBarColor);
+          showAppSnackBar(context, message, backgroundColor: snackBarColor);
         }
       }
     } catch (e) {
@@ -132,13 +157,15 @@ class FireStoreProvider extends ChangeNotifier {
   Stream<List<TaskModel>> getTasksStream(String category) {
     try {
       if (category == "all") {
-        return getTasksCollection().where("userId", isEqualTo:  FirebaseAuth.instance.currentUser!.uid)
+        return getTasksCollection()
+            .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
             .orderBy("date", descending: false)
             .snapshots()
             .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
       }
       return getTasksCollection()
-          .where("category", isEqualTo: category).where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+          .where("category", isEqualTo: category)
+          .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .orderBy("date", descending: false)
           .snapshots()
           .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
@@ -152,12 +179,16 @@ class FireStoreProvider extends ChangeNotifier {
     try {
       if (category == "all") {
         return getTasksCollection()
-            .orderBy("date", descending: false).where("isFav", isEqualTo: true).where("userId", isEqualTo:  FirebaseAuth.instance.currentUser!.uid)
+            .orderBy("date", descending: false)
+            .where("isFav", isEqualTo: true)
+            .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
             .snapshots()
             .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
       }
       return getTasksCollection()
-          .where("category", isEqualTo: category).where("isFav", isEqualTo: true).where("userId",isEqualTo:  FirebaseAuth.instance.currentUser!.uid)
+          .where("category", isEqualTo: category)
+          .where("isFav", isEqualTo: true)
+          .where("userId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
           .orderBy("date", descending: false)
           .snapshots()
           .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
