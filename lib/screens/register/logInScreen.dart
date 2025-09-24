@@ -11,9 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/userModel.dart';
 import '../../providers/authProvider.dart';
-import '../../providers/fireStoreProvider.dart';
 import '../../widgets/snackBar.dart';
 import '../homeScreen.dart';
 
@@ -41,27 +39,29 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   void onNotVerified() {
-    showAppSnackBar(context, "Please verify your email before signing in.",backgroundColor: Colors.orangeAccent);
+    showAppSnackBar(
+      context,
+      "Please verify your email before signing in.",
+      backgroundColor: Colors.orangeAccent,
+    );
   }
 
   void onError(String message) {
-    showAppSnackBar(context,message,backgroundColor: Colors.redAccent);
+    showAppSnackBar(context, message, backgroundColor: Colors.redAccent);
   }
-
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       print('Email: ${_emailController.text}');
       print('Password: ${_passwordController.text}');
       print('Form contains errors.');
-      Provider.of<AuthProvider>(context, listen: false)
-          .signInWithEmail(
-            _emailController.text,
-            _passwordController.text,
-            onVerified: onVerified,
-            onNotVerified: onNotVerified,
-            onError: onError,
-          );
+      Provider.of<AuthProvider>(context, listen: false).signInWithEmail(
+        _emailController.text,
+        _passwordController.text,
+        onVerified: onVerified,
+        onNotVerified: onNotVerified,
+        onError: onError,
+      );
     }
   }
 
@@ -222,7 +222,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         fontStyle: FontStyle.italic,
                         decoration: TextDecoration.underline,
                         decorationColor: Theme.of(context).primaryColor,
-                      )
+                      ),
                     ),
                   ),
                 ),
@@ -247,21 +247,28 @@ class _LogInScreenState extends State<LogInScreen> {
                       children: [
                         TextSpan(
                           text: "don't_have_account".tr(),
-                          style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                            color:Theme.of(context).colorScheme.onSecondary,
-                          ),
+                          style: Theme.of(context).textTheme.displayLarge!
+                              .copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSecondary,
+                              ),
                         ),
                         TextSpan(
                           text: "create_account".tr(),
-                            style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                              color: LightColors().primary1,
-                              fontStyle: FontStyle.italic,
-                              decoration: TextDecoration.underline,
-                              decorationColor: Theme.of(context).primaryColor,
-                            ),
+                          style: Theme.of(context).textTheme.displayLarge!
+                              .copyWith(
+                                color: LightColors().primary1,
+                                fontStyle: FontStyle.italic,
+                                decoration: TextDecoration.underline,
+                                decorationColor: Theme.of(context).primaryColor,
+                              ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                              Navigator.pushReplacementNamed(
+                                context,
+                                SignUpScreen.routeName,
+                              );
                             },
                         ),
                       ],
@@ -279,11 +286,11 @@ class _LogInScreenState extends State<LogInScreen> {
                         endIndent: 16.w,
                       ),
                     ),
-                    Text("Or",
-                        style: Theme.of(context)
-                            .textTheme
-                            .displayLarge!
-                            .copyWith(color: LightColors().primary1)
+                    Text(
+                      "Or",
+                      style: Theme.of(context).textTheme.displayLarge!.copyWith(
+                        color: LightColors().primary1,
+                      ),
                     ),
                     Expanded(
                       child: Divider(
@@ -293,18 +300,44 @@ class _LogInScreenState extends State<LogInScreen> {
                         indent: 16.w,
                       ),
                     ),
-
                   ],
                 ),
                 SizedBox(height: 24.h),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _submitForm,
+                    onPressed: () async {
+                      final auth = Provider.of<AuthProvider>(
+                        context,
+                        listen: false,
+                      );
+                      await auth.signInWithGoogle(
+                        onSuccess: (msg) {
+                          final authProvider = Provider.of<AuthProvider>(
+                            context,
+                            listen: false,
+                          );
+                          authProvider.initUser();
+                          Navigator.pushReplacementNamed(
+                            context,
+                            HomeScreen.routeName,
+                          );
+                          showAppSnackBar(context, msg);
+                        },
+                        onError: (err) {
+                          showAppSnackBar(
+                            context,
+                            err.toString(),
+                            backgroundColor: Colors.redAccent,
+                          );
+                        },
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
-                      backgroundColor: SharedPreferencesHelper.getDarkMode() ?
-                      DarkColors().backgroundColor : LightColors().backgroundColor,
+                      backgroundColor: SharedPreferencesHelper.getDarkMode()
+                          ? DarkColors().backgroundColor
+                          : LightColors().backgroundColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16.r),
                         side: BorderSide(
@@ -326,16 +359,14 @@ class _LogInScreenState extends State<LogInScreen> {
                           SizedBox(width: 8.w),
                           Text(
                             "login_google".tr(),
-                            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                              color: LightColors().primary1,
-                            ),
+                            style: Theme.of(context).textTheme.headlineSmall!
+                                .copyWith(color: LightColors().primary1),
                           ),
                         ],
                       ),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),

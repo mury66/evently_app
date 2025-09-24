@@ -23,37 +23,35 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await EasyLocalization.ensureInitialized();
   await SharedPreferencesHelper.init();
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('ar'),Locale('en')],
+      supportedLocales: [Locale('ar'), Locale('en')],
       path:
           'assets/translations', // <-- change the path of the translation files
       fallbackLocale: Locale('en'),
       saveLocale: true,
       child: MultiProvider(
-          providers: [
-            ChangeNotifierProvider<ThemeProvider>(
-              create: (context) => ThemeProvider(),
-            ),
-            ChangeNotifierProvider<TabsProvider>(
-              create: (context) => TabsProvider(),
-            ),
-            ChangeNotifierProvider<AuthProvider>(
-              create: (context) => AuthProvider(),
-            ),
-            ChangeNotifierProvider<CategoriesProvider>(
-              create: (_) => CategoriesProvider(),
-            ),
-            ChangeNotifierProvider<FireStoreProvider>(
-              create: (_) => FireStoreProvider(),
-            ),
-          ],
-          child: MyApp()
+        providers: [
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (context) => ThemeProvider(),
+          ),
+          ChangeNotifierProvider<TabsProvider>(
+            create: (context) => TabsProvider(),
+          ),
+          ChangeNotifierProvider<AuthProvider>(
+            create: (context) => AuthProvider(),
+          ),
+          ChangeNotifierProvider<CategoriesProvider>(
+            create: (_) => CategoriesProvider(),
+          ),
+          ChangeNotifierProvider<FireStoreProvider>(
+            create: (_) => FireStoreProvider(),
+          ),
+        ],
+        child: MyApp(),
       ),
     ),
   );
@@ -61,7 +59,6 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
-
 
   // This widget is the root of your application.
   @override
