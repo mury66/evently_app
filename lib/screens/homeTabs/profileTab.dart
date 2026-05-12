@@ -146,44 +146,67 @@ class _ProfileTabState extends State<ProfileTab> {
               SizedBox(height: 24.h),
 
               if (authProvider.isLoggedIn)
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: _saving
-                        ? null
-                        : () async {
-                            if (!_formKey.currentState!.validate()) return;
-                            setState(() => _saving = true);
-                            try {
-                              final updated = UserModel(
-                                id: user?.uid,
-                                name: _nameController.text.trim(),
-                                email: userModel?.email ?? user?.email,
-                                phone: _phoneController.text.trim(),
-                              );
-                              await FireStoreProvider().updateUser(
-                                updated,
-                                context,
-                              );
-                              await authProvider.initUser();
-                            } finally {
-                              if (mounted) setState(() => _saving = false);
-                            }
-                          },
-                    child: _saving
-                        ? SizedBox(
-                            height: 20.r,
-                            width: 20.r,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(
-                            'save'.tr(),
-                            style: context.bodyMedium.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _saving
+                            ? null
+                            : () async {
+                                if (!_formKey.currentState!.validate()) return;
+                                setState(() => _saving = true);
+                                try {
+                                  final updated = UserModel(
+                                    id: user?.uid,
+                                    name: _nameController.text.trim(),
+                                    email: userModel?.email ?? user?.email,
+                                    phone: _phoneController.text.trim(),
+                                  );
+                                  await FireStoreProvider().updateUser(
+                                    updated,
+                                    context,
+                                  );
+                                  await authProvider.initUser();
+                                } finally {
+                                  if (mounted) setState(() => _saving = false);
+                                }
+                              },
+                        child: _saving
+                            ? SizedBox(
+                                height: 20.r,
+                                width: 20.r,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                'save'.tr(),
+                                style: context.bodyMedium.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    TextButton(
+                      onPressed: () async {
+                        await authProvider.signOut();
+                        if (mounted) {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            LogInScreen.routeName,
+                          );
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.redAccent,
+                      ),
+                      child: Text('logout'.tr()),
+                    ),
+                  ],
                 )
               else
                 SizedBox(
